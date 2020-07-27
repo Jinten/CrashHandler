@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="clr-namespace:CrashHandler.ViewwModels"
+        xmlns:behaviors="clr-namespace:CrashHandler.Behaviors"
         xmlns:local="clr-namespace:CrashHandler"
         mc:Ignorable="d"
         Title="Crash Handler" Height="600" Width="800">
@@ -20,8 +21,27 @@
         </Grid.RowDefinitions>
 
         <ListView Grid.Row="0" ItemsSource="{Binding CallStackList}">
+            <ListView.ItemContainerStyle>
+                <Style TargetType="{x:Type ListViewItem}">                    
+                    <Setter Property="ContextMenu">
+                        <Setter.Value>
+                            <ContextMenu>
+                                <MenuItem Header="Open with VS" Command="{Binding OpenWithVSCommand}"/>
+                            </ContextMenu>
+                        </Setter.Value>
+                    </Setter>
+                    <Setter Property="behaviors:MouseDoubleClickedBehavior.DoubleClickedCommand" Value="{Binding DoubleClickedCommand}"/>
+                </Style>
+            </ListView.ItemContainerStyle>
             <ListView.View>
                 <GridView>
+                    <GridViewColumn Header="Address" Width="128">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Address}" ToolTip="{Binding Address}"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
                     <GridViewColumn Header="CallStack" Width="256">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
@@ -29,11 +49,11 @@
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn Header="Line" DisplayMemberBinding="{Binding LineNumber}" Width="64"/>
+                    <GridViewColumn Header="Line" DisplayMemberBinding="{Binding SourceLine}" Width="64"/>
                     <GridViewColumn Header="FileName" Width="420">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding FileName}" ToolTip="{Binding FileName}"/>
+                                <TextBlock Text="{Binding SourceFile}" ToolTip="{Binding SourceFile}"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>

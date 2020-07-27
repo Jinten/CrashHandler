@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.1022
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30320.27
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CrashTest", "CrashTest\CrashTest.vcxproj", "{9AAB478C-9752-49E3-AD7A-0C53AEBE75BA}"
 EndProject
@@ -20,6 +20,7 @@ Global
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{9AAB478C-9752-49E3-AD7A-0C53AEBE75BA}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{9AAB478C-9752-49E3-AD7A-0C53AEBE75BA}.Debug|Any CPU.Build.0 = Debug|x64
 		{9AAB478C-9752-49E3-AD7A-0C53AEBE75BA}.Debug|x64.ActiveCfg = Debug|x64
 		{9AAB478C-9752-49E3-AD7A-0C53AEBE75BA}.Debug|x64.Build.0 = Debug|x64
 		{9AAB478C-9752-49E3-AD7A-0C53AEBE75BA}.Debug|x86.ActiveCfg = Debug|Win32
@@ -42,6 +43,7 @@ Global
 		{2B8AD3D9-3D14-4013-A8A2-C7A7C248D6BC}.Release|x86.ActiveCfg = Release|Any CPU
 		{2B8AD3D9-3D14-4013-A8A2-C7A7C248D6BC}.Release|x86.Build.0 = Release|Any CPU
 		{95F298F9-B24B-4DFF-A1EA-C21C82AA8AA7}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{95F298F9-B24B-4DFF-A1EA-C21C82AA8AA7}.Debug|Any CPU.Build.0 = Debug|x64
 		{95F298F9-B24B-4DFF-A1EA-C21C82AA8AA7}.Debug|x64.ActiveCfg = Debug|x64
 		{95F298F9-B24B-4DFF-A1EA-C21C82AA8AA7}.Debug|x64.Build.0 = Debug|x64
 		{95F298F9-B24B-4DFF-A1EA-C21C82AA8AA7}.Debug|x86.ActiveCfg = Debug|Win32

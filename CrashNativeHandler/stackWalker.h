@@ -70,14 +70,14 @@ namespace ao
 			return mUndecoratedName;
 		}
 
-		u32 getLineNumber() const
+		u32 getSourceLine() const
 		{
-			return mLineNumber;
+			return mSourceLine;
 		}
 
-		const std::string& getFileName() const
+		const std::string& getSourceFile() const
 		{
-			return mFileName;
+			return mSourceFile;
 		}
 
 		bool resolve(HANDLE process)
@@ -106,8 +106,8 @@ namespace ao
 			}
 
 			mIsValid = true;
-			mLineNumber = line.LineNumber;
-			mFileName.assign(line.FileName);
+			mSourceLine = line.LineNumber;
+			mSourceFile.assign(line.FileName);
 
 			return mIsValid;
 		}
@@ -123,8 +123,8 @@ namespace ao
 
 		std::string mUndecoratedName;
 
-		u32 mLineNumber = 0;
-		std::string mFileName;
+		u32 mSourceLine = 0;
+		std::string mSourceFile;
 	};
 
 	/*!-----------------------------------------------------------

@@ -21,7 +21,7 @@ namespace
 		return std::wstring(dest, dest + size - 1);
 	}
 
-	StackWalker stackWalker;
+	ao::StackWalker stackWalker;
 
 	std::wstring crashAppName;
 }
@@ -91,12 +91,14 @@ LONG WINAPI CrashNativeHandler::dump(EXCEPTION_POINTERS* exp)
 			continue;
 		}
 
+		args.append(L" ");
+		args.append(std::to_wstring((DWORD64)stack.getAddr()));
 		args.append(L" \"");
 		args.append(StringToWString(stack.getUndecoratedName()));
 		args.append(L"\" \"");
-		args.append(std::to_wstring(stack.getLineNumber()));
+		args.append(std::to_wstring(stack.getSourceLine()));
 		args.append(L"\" \"");
-		args.append(StringToWString(stack.getFileName()));
+		args.append(StringToWString(stack.getSourceFile()));
 		args.append(L"\"");
 	}
 
