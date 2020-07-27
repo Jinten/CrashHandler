@@ -112,6 +112,11 @@ namespace CrashHandler.ViewwModels
 
         public MainWindowViewModel()
         {
+            if(StartupInformation.Args.Count() == 0)
+            {
+                return;
+            }
+
             var args = StartupInformation.Args;
             int nArgs = StartupInformation.Args.Length;
 
