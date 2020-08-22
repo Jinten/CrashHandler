@@ -66,9 +66,7 @@ namespace CrashHandler.ViewwModels
                 EnvDTE.Window window = dte.ItemOperations.OpenFile(SourceFile, "{7651A703-06E5-11D1-8EBD-00A0C90F26EA}");
                 ((EnvDTE.TextSelection)dte.ActiveDocument.Selection).GotoLine(int.Parse(SourceLine), true);
             }
-#pragma warning disable IDE0059 // 値の不必要な代入
-            catch (Exception e)
-#pragma warning restore IDE0059 // 値の不必要な代入
+            catch (Exception)
             {
                 var processInfo = new ProcessStartInfo("cmd.exe", "/c " + $"code --goto {SourceFile}:{SourceLine}");
                 processInfo.CreateNoWindow = true;
@@ -167,7 +165,6 @@ namespace CrashHandler.ViewwModels
         {
             if (StartupInformation.Args.Count() == 0)
             {
-                _CallStackList.Add(new CallStackViewModel("0", "test", "1", @"C:\Users\Jinten\Desktop\develop\CrashHandler\CrashTest\main.cpp"));
                 return;
             }
 

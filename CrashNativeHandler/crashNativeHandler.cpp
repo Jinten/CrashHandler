@@ -24,14 +24,16 @@ namespace
 	ao::StackWalker stackWalker;
 
 	std::wstring crashAppName;
+	std::wstring crashHandlerPath;
 }
 
-void CrashNativeHandler::setup(const std::wstring& appName)
+void CrashNativeHandler::setup(const std::wstring& appName, const std::wstring& handlerPath)
 {
 	stackWalker.initialize();
 	SetUnhandledExceptionFilter(dump);
 
 	crashAppName = appName;
+	crashHandlerPath = handlerPath;
 }
 
 void CrashNativeHandler::terminate()
@@ -49,7 +51,7 @@ LONG WINAPI CrashNativeHandler::dump(EXCEPTION_POINTERS* exp)
 	auto threadId = GetCurrentThreadId();
 
 	wchar_t szFileName[MAX_PATH];
-	StringCchPrintf(szFileName, MAX_PATH, L"%s-%04d-%02d%02d-%02d%02d.dmp", crashAppName.c_str(), time.wYear, time.wMonth, time.wDay, time.wHour, time.wMinute);
+	StringCchPrintfW(szFileName, MAX_PATH, L"%s-%04d-%02d%02d-%02d%02d.dmp", crashAppName.c_str(), time.wYear, time.wMonth, time.wDay, time.wHour, time.wMinute);
 
 	HANDLE hDumpFile = CreateFile(szFileName, GENERIC_READ | GENERIC_WRITE, FILE_SHARE_WRITE | FILE_SHARE_READ, 0, CREATE_ALWAYS, 0, 0);
 
@@ -71,13 +73,13 @@ LONG WINAPI CrashNativeHandler::dump(EXCEPTION_POINTERS* exp)
 		stackWalker.resolve(i);
 	}
 
-	const u32 dirPathLength = GetCurrentDirectory(0, nullptr);
+	const u32 dirPathLength = GetCurrentDirectoryW(0, nullptr);
 
 	auto dirPath = (wchar_t*)alloca(dirPathLength * sizeof(wchar_t));
-	GetCurrentDirectory(dirPathLength, dirPath);
+	GetCurrentDirectoryW(dirPathLength, dirPath);
 
 	wchar_t dumpPath[MAX_PATH];
-	StringCchPrintf(dumpPath, MAX_PATH, L"\"%s\\%s\"", dirPath, szFileName);
+	StringCchPrintfW(dumpPath, MAX_PATH, L"\"%s\\%s\"", dirPath, szFileName);
 
 	// 何故か第二引数（コマンドライン引数）には先頭にスペースが必要。でないと先頭の引数が解釈されない。
 	std::wstring args(L" ");
@@ -107,10 +109,13 @@ LONG WINAPI CrashNativeHandler::dump(EXCEPTION_POINTERS* exp)
 
 	PROCESS_INFORMATION processInformation = { 0 };
 
-	bool result = CreateProcess(L"CrashHandler.exe", (LPWSTR)args.c_str(), nullptr, nullptr, false, 0, nullptr, nullptr, &startupInfo, &processInformation);
+	LPCWSTR processName = crashHandlerPath.empty() ? L"CrashHandler.exe" : crashHandlerPath.c_str();
+	bool result = CreateProcessW(processName, (LPWSTR)args.c_str(), nullptr, nullptr, false, 0, nullptr, nullptr, &startupInfo, &processInformation);
 	if (result == false)
 	{
-		OutputDebugString(L"Failed to create process.");
+		std::ofstream ofs("error_log.txt");
+		ofs << "CurrentDirectoryPath = " << dirPath << "\\" << processName;
+		ofs << "DumpPath = " << dumpPath;
 	}
 
 	return EXCEPTION_EXECUTE_HANDLER;

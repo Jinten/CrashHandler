@@ -99,7 +99,7 @@ namespace ao
 			}
 
 			mUndecoratedName.resize(MAX_UNDECORATEDNAME_LENGTH);
-			if (UnDecorateSymbolName(mSymbol.Name, (LPSTR)mUndecoratedName.data(), MAX_UNDECORATEDNAME_LENGTH, UNDNAME_COMPLETE) == false)
+			if (UnDecorateSymbolName(mSymbol.Name, (LPSTR)mUndecoratedName.data(), MAX_UNDECORATEDNAME_LENGTH, UNDECORATE_FLAGS) == false)
 			{
 				mIsValid = false;
 				return false;
@@ -114,6 +114,7 @@ namespace ao
 
 	private:
 		static constexpr u32 MAX_UNDECORATEDNAME_LENGTH = 512;
+		static constexpr DWORD UNDECORATE_FLAGS = UNDNAME_NO_ACCESS_SPECIFIERS | UNDNAME_NO_MEMBER_TYPE | UNDNAME_NO_MS_KEYWORDS | UNDNAME_NO_LEADING_UNDERSCORES;
 
 	private:
 		bool mIsValid = false;
@@ -133,6 +134,8 @@ namespace ao
 	------------------------------------------------------------*/
 	class StackWalker
 	{
+		static constexpr DWORD SYM_OPTIONS = SYMOPT_DEFERRED_LOADS | SYMOPT_LOAD_LINES | SYMOPT_PUBLICS_ONLY;
+
 	public:
 		StackWalker() {}
 		~StackWalker() {}
@@ -140,11 +143,11 @@ namespace ao
 		void initialize()
 		{
 			mProcess = GetCurrentProcess();
-			SymSetOptions(SYMOPT_DEFERRED_LOADS | SYMOPT_LOAD_LINES | SYMOPT_PUBLICS_ONLY);
-			if (SymInitialize(mProcess, NULL, TRUE))
-			{
-				mReady = true;
-			}
+
+			SymSetOptions(SYM_OPTIONS);
+			SymInitialize(mProcess, NULL, TRUE);
+
+			mReady = true;
 		}
 
 		void finalize()

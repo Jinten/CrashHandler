@@ -8,7 +8,7 @@ namespace ao
 	class CrashNativeHandler
 	{
 	public:
-		static void setup(const std::wstring& appName);
+		static void setup(const std::wstring& appName, const std::wstring& handlerPath = L"");
 		static void terminate();
 
 	public:
